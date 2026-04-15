@@ -26,6 +26,7 @@ function Navbar() {
                     <Link to="/" className="nav-item nav-link">Home</Link>
                     <Link to="/about" className="nav-item nav-link">About</Link>
                     <Link to="/courses" className="nav-item nav-link">Courses</Link>
+                    <Link to="/categories" className="nav-item nav-link">Categories</Link>
                     <Link to="/contact" className="nav-item nav-link">Contact</Link>
                     {isAuthenticated && (
                         <>

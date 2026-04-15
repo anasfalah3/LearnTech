@@ -1,13 +1,21 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useMemo, useState, useEffect } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import Testimonials from '../../components/common/Testimonials'
 import CourseGrid from '../../components/courses/CourseGrid'
 import CourseFilters from '../../components/courses/CourseFilters'
 import { courses as courseData } from '../../data/courses'
 
 function CoursesPage() {
+      const [searchParams] = useSearchParams()
       const [search, setSearch] = useState('')
       const [category, setCategory] = useState('all')
+
+      useEffect(() => {
+            const categoryParam = searchParams.get('category')
+            if (categoryParam) {
+                  setCategory(categoryParam)
+            }
+      }, [searchParams])
 
       const categories = useMemo(
             () => Array.from(new Set(courseData.map((course) => course.category))),

@@ -55,7 +55,7 @@ export const courses = [
             rating: 4.7,
             students: 276,
             hours: '7.3',
-            image: 'assets/img/course-4.jpg',
+            image: 'assets/img/course-1.jpg',
             description: 'Understand digital marketing channels, SEO, paid ads, email campaigns, and analytics for growing online audiences.',
             details: 'This course gives you the tools to launch campaigns, optimize traffic, and measure results across major marketing platforms.'
       },
@@ -70,7 +70,7 @@ export const courses = [
             rating: 4.9,
             students: 295,
             hours: '9.0',
-            image: 'assets/img/course-5.jpg',
+            image: 'assets/img/course-2.jpg',
             description: 'Build user-centered interfaces with wireframes, prototyping, and usability testing in this practical design course.',
             details: 'Focus on user research, interaction design, and visual consistency to create products people love to use.'
       },
@@ -85,7 +85,7 @@ export const courses = [
             rating: 4.5,
             students: 170,
             hours: '5.2',
-            image: 'assets/img/course-6.jpg',
+            image: 'assets/img/course-3.jpg',
             description: 'Take your CSS skills to the next level with grid, flexbox, animations, and responsive layouts.',
             details: 'Learn new layout approaches, custom components, and CSS best practices for modern web projects.'
       }

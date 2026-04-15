@@ -45,7 +45,7 @@ export default function AppRouter() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/:slug" element={<CourseDetailPage />} />
-            {/* <Route path="/categories/:slug" element={<CategoryPage />} /> */}
+            <Route path="/categories" element={<CategoryPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
