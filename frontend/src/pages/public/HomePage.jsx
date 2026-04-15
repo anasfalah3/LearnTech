@@ -8,6 +8,7 @@ import 'swiper/css/effect-fade';
 import Team from '../../components/common/Team';
 import Testimonials from '../../components/common/Testimonials';
 import CourseGrid from '../../components/courses/CourseGrid';
+import { courses } from '../../data/courses'
 
 function HomePage() {
     const slides = [
@@ -20,6 +21,8 @@ function HomePage() {
             title: "Get Educated Online From Your Home",
         },
     ];
+
+    const bestCourses = courses.slice(0, 3)
 
     return (
         <>
@@ -219,6 +222,10 @@ function HomePage() {
             </div>
             {/* Categories Start */}
 
+
+            {/* Best Courses Start */}
+            <CourseGrid courses={bestCourses} title="Top Courses" subtitle="Our Best Courses" />
+            {/* Best Courses End */}
 
             {/* Courses Start */}
             <CourseGrid />
