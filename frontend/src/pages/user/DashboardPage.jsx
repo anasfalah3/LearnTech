@@ -1,8 +1,10 @@
 import React from 'react'
 import { useAuth } from '../../hooks/useAuth'
+import { useCart } from '../../hooks/useCart'
 
 function DashboardPage() {
       const { user } = useAuth()
+      const { openSidebar } = useCart()
 
       return (
             <div className="container-xxl py-5">
@@ -28,7 +30,7 @@ function DashboardPage() {
                                                 <i className="fa fa-shopping-cart fa-3x text-primary mb-3"></i>
                                                 <h5 className="card-title">Cart</h5>
                                                 <p className="card-text">Check your shopping cart</p>
-                                                <a href="/cart" className="btn btn-primary">View Cart</a>
+                                                <button type="button" className="btn btn-primary" onClick={openSidebar}>View Cart</button>
                                           </div>
                                     </div>
                               </div>

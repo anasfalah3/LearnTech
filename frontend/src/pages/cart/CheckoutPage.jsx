@@ -1,12 +1,20 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useCart } from '../../hooks/useCart'
 import { useAuth } from '../../hooks/useAuth'
 
 function CheckoutPage() {
       const { cartItems, totalItems, totalPrice, clearCart, showToast } = useCart()
-      const { enrollCourses } = useAuth()
+      const { enrollCourses, isAuthenticated } = useAuth()
       const navigate = useNavigate()
+      const location = useLocation()
+
+      useEffect(() => {
+            if (!isAuthenticated) {
+                  showToast('Please log in to continue to checkout.')
+                  navigate('/login', { state: { from: location }, replace: true })
+            }
+      }, [isAuthenticated, navigate, location, showToast])
 
       const handlePurchase = () => {
             enrollCourses(cartItems)

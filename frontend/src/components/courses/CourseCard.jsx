@@ -1,21 +1,13 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useCart } from '../../hooks/useCart'
-import { useAuth } from '../../hooks/useAuth'
 
 function CourseCard({ course }) {
       const { addToCart, cartItems } = useCart()
-      const { isAuthenticated } = useAuth()
-      const navigate = useNavigate()
 
       const inCart = cartItems.some((item) => item.id === course.id)
 
       const handleAddToCart = () => {
-            if (!isAuthenticated) {
-                  navigate('/login')
-                  return
-            }
-
             addToCart({
                   id: course.id,
                   slug: course.slug,

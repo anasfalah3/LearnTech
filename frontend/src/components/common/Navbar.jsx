@@ -31,30 +31,21 @@ function Navbar() {
                     {isAuthenticated && (
                         <>
                             <Link to="/dashboard" className="nav-item nav-link">Dashboard</Link>
-                            <button type="button" onClick={openSidebar} className="nav-item nav-link btn btn-link position-relative">
-                                Cart
-                                {totalItems > 0 && (
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {totalItems}
-                                    </span>
-                                )}
-                            </button>
                             {isAdmin && <Link to="/admin" className="nav-item nav-link">Admin</Link>}
                         </>
                     )}
                 </div>
                 <div className="d-flex align-items-center px-4 px-lg-5">
+                    <button type="button" onClick={openSidebar} className="btn btn-outline-secondary position-relative d-flex align-items-center py-2 px-3 me-3">
+                        <i className="fa fa-shopping-cart me-2"></i>
+                        {totalItems > 0 && (
+                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {totalItems}
+                            </span>
+                        )}
+                    </button>
                     {isAuthenticated ? (
                         <div className="d-flex align-items-center gap-2">
-                            <button type="button" onClick={openSidebar} className="btn btn-outline-secondary position-relative d-flex align-items-center py-2 px-3">
-                                <i className="fa fa-shopping-cart me-2"></i>
-                                Cart
-                                {totalItems > 0 && (
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {totalItems}
-                                    </span>
-                                )}
-                            </button>
                             <span className="me-3 d-none d-lg-block">Welcome, {user.firstName}!</span>
                             <button onClick={handleLogout} className="btn btn-outline-primary py-2 px-3">
                                 Logout

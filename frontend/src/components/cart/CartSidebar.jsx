@@ -43,8 +43,8 @@ export default function CartSidebar() {
                                                 <span className="fw-semibold">Total</span>
                                                 <span className="fw-bold">${totalPrice.toFixed(2)}</span>
                                           </div>
-                                          <Link to="/cart" className="btn btn-primary w-100" onClick={closeSidebar}>
-                                                Go to Cart
+                                          <Link to="/checkout" className="btn btn-primary w-100" onClick={closeSidebar}>
+                                                Proceed to Checkout
                                           </Link>
                                     </div>
                               </>

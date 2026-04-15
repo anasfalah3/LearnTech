@@ -22,7 +22,6 @@ const DashboardPage = lazy(() => import('../pages/user/DashboardPage'))
 const MyCoursesPage = lazy(() => import('../pages/user/MyCoursesPage'))
 const CoursePlayerPage = lazy(() => import('../pages/user/CoursePlayerPage'))
 const ProfilePage = lazy(() => import('../pages/user/ProfilePage'))
-const CartPage = lazy(() => import('../pages/cart/CartPage'))
 const CheckoutPage = lazy(() => import('../pages/cart/CheckoutPage'))
 
 // ── Admin pages ───────────────────────────────────────────────
@@ -46,6 +45,7 @@ export default function AppRouter() {
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/:slug" element={<CourseDetailPage />} />
             <Route path="/categories" element={<CategoryPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -58,8 +58,6 @@ export default function AppRouter() {
               <Route path="/my-courses" element={<MyCoursesPage />} />
               <Route path="/learn/:slug" element={<CoursePlayerPage />} />
               <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
             </Route>
           </Route>
 

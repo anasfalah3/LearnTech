@@ -1,13 +1,10 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { courses } from '../../data/courses'
 import { useCart } from '../../hooks/useCart'
-import { useAuth } from '../../hooks/useAuth'
 
 function CourseDetailPage() {
       const { slug } = useParams()
-      const navigate = useNavigate()
-      const { addToCart, cartItems } = useCart()
-      const { isAuthenticated } = useAuth()
+      const { addToCart, cartItems, openSidebar } = useCart()
       const course = courses.find((item) => item.slug === slug)
       const inCart = cartItems.some((item) => item.id === course?.id)
 
@@ -23,11 +20,6 @@ function CourseDetailPage() {
       }
 
       const handleAddToCart = () => {
-            if (!isAuthenticated) {
-                  navigate('/login')
-                  return
-            }
-
             addToCart({
                   id: course.id,
                   slug: course.slug,
@@ -73,9 +65,13 @@ function CourseDetailPage() {
                                           >
                                                 {inCart ? 'In Cart' : 'Add to Cart'}
                                           </button>
-                                          <Link to="/cart" className="btn btn-outline-primary btn-lg">
-                                                Go to Cart
-                                          </Link>
+                                          <button
+                                                type="button"
+                                                className="btn btn-outline-primary btn-lg"
+                                                onClick={openSidebar}
+                                          >
+                                                View Cart
+                                          </button>
                                     </div>
                               </div>
                         </div>
