@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +16,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Admin user
+        User::create([
+            'name'     => 'Admin',
+            'email'    => 'admin@eduflow.com',
+            'password' => Hash::make('password'),
+            'role'     => 'admin',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Test user
+        User::create([
+            'name'     => 'Test User',
+            'email'    => 'user@eduflow.com',
+            'password' => Hash::make('password'),
+            'role'     => 'user',
+        ]);
+
+        // Sample category
+        $cat = \App\Models\Category::create([
+            'name' => 'Web Development',
+            'slug' => 'web-development',
+        ]);
+
+        // Sample course
+        \App\Models\Course::create([
+            'category_id'  => $cat->id,
+            'user_id'      => 1,
+            'title'        => 'Complete React Course',
+            'slug'         => 'complete-react-course',
+            'description'  => 'Learn React from scratch.',
+            'price'        => 299.00,
+            'level'        => 'beginner',
+            'is_published' => true,
         ]);
     }
 }
