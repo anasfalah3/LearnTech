@@ -3,12 +3,14 @@ import { Link, useSearchParams } from 'react-router-dom'
 import Testimonials from '../../components/common/Testimonials'
 import CourseGrid from '../../components/courses/CourseGrid'
 import CourseFilters from '../../components/courses/CourseFilters'
-import { courses as courseData } from '../../data/courses'
+import { useCourses, useCategories } from '../../hooks/useCourses'
 
 function CoursesPage() {
       const [searchParams] = useSearchParams()
       const [search, setSearch] = useState('')
       const [category, setCategory] = useState('all')
+      const { courses, loading: coursesLoading } = useCourses()
+      const { categories: apiCategories, loading: categoriesLoading } = useCategories()
 
       useEffect(() => {
             const categoryParam = searchParams.get('category')
@@ -17,13 +19,16 @@ function CoursesPage() {
             }
       }, [searchParams])
 
-      const categories = useMemo(
-            () => Array.from(new Set(courseData.map((course) => course.category))),
-            []
-      )
+      // Get unique category names from courses
+      const categories = useMemo(() => {
+            if (apiCategories.length > 0) {
+                  return apiCategories.map(cat => cat.name)
+            }
+            return Array.from(new Set(courses.map((course) => course.category)))
+      }, [apiCategories, courses])
 
       const filteredCourses = useMemo(() => {
-            return courseData.filter((course) => {
+            return courses.filter((course) => {
                   const matchesSearch = [course.title, course.teacher, course.category]
                         .join(' ')
                         .toLowerCase()
@@ -31,7 +36,7 @@ function CoursesPage() {
                   const matchesCategory = category === 'all' || course.category === category
                   return matchesSearch && matchesCategory
             })
-      }, [search, category])
+      }, [search, category, courses])
 
       return (
             <>
@@ -68,7 +73,11 @@ function CoursesPage() {
                                     onCategoryChange={setCategory}
                               />
                               <div className="mb-4 text-end">
-                                    <span className="text-muted">Showing {filteredCourses.length} of {courseData.length} courses</span>
+                                    {coursesLoading ? (
+                                          <span className="text-muted">Loading...</span>
+                                    ) : (
+                                          <span className="text-muted">Showing {filteredCourses.length} of {courses.length} courses</span>
+                                    )}
                               </div>
                         </div>
                   </div>

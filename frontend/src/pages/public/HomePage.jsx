@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useEffect } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
@@ -8,9 +8,21 @@ import 'swiper/css/effect-fade';
 import Team from '../../components/common/Team';
 import Testimonials from '../../components/common/Testimonials';
 import CourseGrid from '../../components/courses/CourseGrid';
-import { courses } from '../../data/courses'
+import { useCourses, useCategories } from '../../hooks/useCourses'
 
 function HomePage() {
+    const { courses, loading } = useCourses()
+    const { categories } = useCategories()
+
+    useEffect(() => {
+        const fetch = async () => {
+            // Fetch courses and categories
+            const coursesModule = await import('../../hooks/useCourses')
+            // The hooks are already being called, data will load automatically
+        }
+        fetch()
+    }, [])
+
     const slides = [
         {
             img: "assets/img/carousel-1.jpg",

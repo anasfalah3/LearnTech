@@ -1,18 +1,28 @@
 import { Link, useParams } from 'react-router-dom'
-import { courses } from '../../data/courses'
 import { useCart } from '../../hooks/useCart'
+import { useCourseDetail } from '../../hooks/useCourses'
 
 function CourseDetailPage() {
       const { slug } = useParams()
+      const { course, loading, error } = useCourseDetail(slug)
       const { addToCart, cartItems, openSidebar } = useCart()
-      const course = courses.find((item) => item.slug === slug)
       const inCart = cartItems.some((item) => item.id === course?.id)
 
-      if (!course) {
+      if (loading) {
             return (
                   <div className="container-xxl py-5">
                         <div className="container">
-                              <div className="alert alert-danger">Course not found.</div>
+                              <div className="alert alert-info">Loading course...</div>
+                        </div>
+                  </div>
+            )
+      }
+
+      if (error || !course) {
+            return (
+                  <div className="container-xxl py-5">
+                        <div className="container">
+                              <div className="alert alert-danger">{error || 'Course not found.'}</div>
                               <Link to="/courses" className="btn btn-primary">Back to Courses</Link>
                         </div>
                   </div>
