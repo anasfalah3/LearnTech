@@ -1,4 +1,5 @@
-import { Link, useEffect } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
@@ -15,12 +16,7 @@ function HomePage() {
     const { categories } = useCategories()
 
     useEffect(() => {
-        const fetch = async () => {
-            // Fetch courses and categories
-            const coursesModule = await import('../../hooks/useCourses')
-            // The hooks are already being called, data will load automatically
-        }
-        fetch()
+        // Hooks will auto-fetch data on mount
     }, [])
 
     const slides = [

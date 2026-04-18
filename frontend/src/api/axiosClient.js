@@ -4,6 +4,7 @@ async function axiosClient(path, { method = 'GET', body, token, headers = {} } =
       const config = {
             method,
             headers: {
+                  'Accept': 'application/json',
                   'Content-Type': 'application/json',
                   ...headers,
             },
@@ -22,7 +23,10 @@ async function axiosClient(path, { method = 'GET', body, token, headers = {} } =
 
       if (!response.ok) {
             const message = payload?.message || 'API request failed'
-            throw new Error(message)
+            const error = new Error(message)
+            error.status = response.status
+            error.payload = payload
+            throw error
       }
 
       return payload

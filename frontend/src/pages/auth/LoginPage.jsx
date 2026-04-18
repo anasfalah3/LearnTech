@@ -5,7 +5,9 @@ import { useAuth } from '../../hooks/useAuth'
 function LoginPage() {
       const [email, setEmail] = useState('')
       const [password, setPassword] = useState('')
-      const [error, setError] = useState('')
+      const [serverError, setServerError] = useState('')
+      const [validationErrors, setValidationErrors] = useState([])
+      const [fieldErrors, setFieldErrors] = useState({})
       const [loading, setLoading] = useState(false)
 
       const { login } = useAuth()
@@ -17,7 +19,9 @@ function LoginPage() {
       const handleSubmit = async (e) => {
             e.preventDefault()
             setLoading(true)
-            setError('')
+            setServerError('')
+            setValidationErrors([])
+            setFieldErrors({})
 
             const result = await login(email, password)
             setLoading(false)
@@ -25,7 +29,9 @@ function LoginPage() {
             if (result.success) {
                   navigate(from, { replace: true })
             } else {
-                  setError(result.error)
+                  setServerError(result.error)
+                  setValidationErrors(result.errors || [])
+                  setFieldErrors(result.fieldErrors || {})
             }
       }
 
@@ -46,7 +52,7 @@ function LoginPage() {
                                                             <div className="form-floating">
                                                                   <input
                                                                         type="email"
-                                                                        className="form-control"
+                                                                        className={`form-control ${fieldErrors.email ? 'is-invalid' : ''}`}
                                                                         id="email"
                                                                         placeholder="Your Email"
                                                                         value={email}
@@ -54,13 +60,18 @@ function LoginPage() {
                                                                         required
                                                                   />
                                                                   <label htmlFor="email">Your Email</label>
+                                                                  {fieldErrors.email?.map((message, index) => (
+                                                                        <div key={index} className="invalid-feedback d-block">
+                                                                              {message}
+                                                                        </div>
+                                                                  ))}
                                                             </div>
                                                       </div>
                                                       <div className="col-md-12">
                                                             <div className="form-floating">
                                                                   <input
                                                                         type="password"
-                                                                        className="form-control"
+                                                                        className={`form-control ${fieldErrors.password ? 'is-invalid' : ''}`}
                                                                         id="password"
                                                                         placeholder="Your Password"
                                                                         value={password}
@@ -68,11 +79,27 @@ function LoginPage() {
                                                                         required
                                                                   />
                                                                   <label htmlFor="password">Your Password</label>
+                                                                  {fieldErrors.password?.map((message, index) => (
+                                                                        <div key={index} className="invalid-feedback d-block">
+                                                                              {message}
+                                                                        </div>
+                                                                  ))}
                                                             </div>
                                                       </div>
-                                                      {error && (
+                                                      {serverError && (
                                                             <div className="col-md-12">
-                                                                  <div className="alert alert-danger">{error}</div>
+                                                                  <div className="alert alert-danger">{serverError}</div>
+                                                            </div>
+                                                      )}
+                                                      {validationErrors.length > 0 && (
+                                                            <div className="col-md-12">
+                                                                  <div className="alert alert-danger">
+                                                                        <ul className="mb-0 ps-3">
+                                                                              {validationErrors.map((message, index) => (
+                                                                                    <li key={index}>{message}</li>
+                                                                              ))}
+                                                                        </ul>
+                                                                  </div>
                                                             </div>
                                                       )}
                                                       <div className="col-12">

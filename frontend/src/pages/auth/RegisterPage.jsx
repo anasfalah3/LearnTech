@@ -8,7 +8,9 @@ function RegisterPage() {
       const [email, setEmail] = useState('')
       const [password, setPassword] = useState('')
       const [confirmPassword, setConfirmPassword] = useState('')
-      const [error, setError] = useState('')
+      const [serverError, setServerError] = useState('')
+      const [validationErrors, setValidationErrors] = useState([])
+      const [fieldErrors, setFieldErrors] = useState({})
       const [loading, setLoading] = useState(false)
 
       const { register } = useAuth()
@@ -16,10 +18,11 @@ function RegisterPage() {
 
       const handleSubmit = async (e) => {
             e.preventDefault()
-            setError('')
+            setServerError('')
+            setValidationErrors([])
 
             if (password !== confirmPassword) {
-                  setError('Passwords do not match')
+                  setServerError('Passwords do not match')
                   return
             }
 
@@ -31,7 +34,9 @@ function RegisterPage() {
             if (result.success) {
                   navigate('/dashboard')
             } else {
-                  setError(result.error)
+                  setServerError(result.error)
+                  setValidationErrors(result.errors || [])
+                  setFieldErrors(result.fieldErrors || {})
             }
       }
 
@@ -52,7 +57,7 @@ function RegisterPage() {
                                                             <div className="form-floating">
                                                                   <input
                                                                         type="text"
-                                                                        className="form-control"
+                                                                        className={`form-control ${fieldErrors.firstName ? 'is-invalid' : ''}`}
                                                                         id="firstName"
                                                                         placeholder="First Name"
                                                                         value={firstName}
@@ -60,13 +65,18 @@ function RegisterPage() {
                                                                         required
                                                                   />
                                                                   <label htmlFor="firstName">First Name</label>
+                                                                  {fieldErrors.firstName?.map((message, index) => (
+                                                                        <div key={index} className="invalid-feedback d-block">
+                                                                              {message}
+                                                                        </div>
+                                                                  ))}
                                                             </div>
                                                       </div>
                                                       <div className="col-md-6">
                                                             <div className="form-floating">
                                                                   <input
                                                                         type="text"
-                                                                        className="form-control"
+                                                                        className={`form-control ${fieldErrors.lastName ? 'is-invalid' : ''}`}
                                                                         id="lastName"
                                                                         placeholder="Last Name"
                                                                         value={lastName}
@@ -74,13 +84,18 @@ function RegisterPage() {
                                                                         required
                                                                   />
                                                                   <label htmlFor="lastName">Last Name</label>
+                                                                  {fieldErrors.lastName?.map((message, index) => (
+                                                                        <div key={index} className="invalid-feedback d-block">
+                                                                              {message}
+                                                                        </div>
+                                                                  ))}
                                                             </div>
                                                       </div>
                                                       <div className="col-md-12">
                                                             <div className="form-floating">
                                                                   <input
                                                                         type="email"
-                                                                        className="form-control"
+                                                                        className={`form-control ${fieldErrors.email ? 'is-invalid' : ''}`}
                                                                         id="email"
                                                                         placeholder="Your Email"
                                                                         value={email}
@@ -88,13 +103,18 @@ function RegisterPage() {
                                                                         required
                                                                   />
                                                                   <label htmlFor="email">Your Email</label>
+                                                                  {fieldErrors.email?.map((message, index) => (
+                                                                        <div key={index} className="invalid-feedback d-block">
+                                                                              {message}
+                                                                        </div>
+                                                                  ))}
                                                             </div>
                                                       </div>
                                                       <div className="col-md-12">
                                                             <div className="form-floating">
                                                                   <input
                                                                         type="password"
-                                                                        className="form-control"
+                                                                        className={`form-control ${fieldErrors.password ? 'is-invalid' : ''}`}
                                                                         id="password"
                                                                         placeholder="Your Password"
                                                                         value={password}
@@ -102,13 +122,18 @@ function RegisterPage() {
                                                                         required
                                                                   />
                                                                   <label htmlFor="password">Your Password</label>
+                                                                  {fieldErrors.password?.map((message, index) => (
+                                                                        <div key={index} className="invalid-feedback d-block">
+                                                                              {message}
+                                                                        </div>
+                                                                  ))}
                                                             </div>
                                                       </div>
                                                       <div className="col-md-12">
                                                             <div className="form-floating">
                                                                   <input
                                                                         type="password"
-                                                                        className="form-control"
+                                                                        className={`form-control ${fieldErrors.confirmPassword ? 'is-invalid' : ''}`}
                                                                         id="confirmPassword"
                                                                         placeholder="Confirm Password"
                                                                         value={confirmPassword}
@@ -116,11 +141,27 @@ function RegisterPage() {
                                                                         required
                                                                   />
                                                                   <label htmlFor="confirmPassword">Confirm Password</label>
+                                                                  {fieldErrors.confirmPassword?.map((message, index) => (
+                                                                        <div key={index} className="invalid-feedback d-block">
+                                                                              {message}
+                                                                        </div>
+                                                                  ))}
                                                             </div>
                                                       </div>
-                                                      {error && (
+                                                      {serverError && (
                                                             <div className="col-md-12">
-                                                                  <div className="alert alert-danger">{error}</div>
+                                                                  <div className="alert alert-danger">{serverError}</div>
+                                                            </div>
+                                                      )}
+                                                      {validationErrors.length > 0 && (
+                                                            <div className="col-md-12">
+                                                                  <div className="alert alert-danger">
+                                                                        <ul className="mb-0 ps-3">
+                                                                              {validationErrors.map((message, index) => (
+                                                                                    <li key={index}>{message}</li>
+                                                                              ))}
+                                                                        </ul>
+                                                                  </div>
                                                             </div>
                                                       )}
                                                       <div className="col-12">

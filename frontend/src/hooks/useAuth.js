@@ -1,5 +1,10 @@
 import { useAuthStore } from '../store/authStore'
-import { login as apiLogin, register as apiRegister } from '../api/authApi'
+import {
+      login as apiLogin,
+      register as apiRegister,
+      logout as apiLogout,
+      me as apiGetCurrentUser,
+} from '../api/authApi'
 
 export const useAuth = () => {
       const { user, token, setAuth, logout: storeLogout, enrollCourses } = useAuthStore()
@@ -10,7 +15,11 @@ export const useAuth = () => {
                   setAuth(user, token)
                   return { success: true }
             } catch (error) {
-                  return { success: false, error: error.message }
+                  const payload = error?.payload
+                  const message = payload?.message || error.message || 'Login failed'
+                  const fieldErrors = payload?.errors || {}
+                  const errors = Object.values(fieldErrors).flat()
+                  return { success: false, error: message, errors, fieldErrors }
             }
       }
 
@@ -20,12 +29,36 @@ export const useAuth = () => {
                   setAuth(user, token)
                   return { success: true }
             } catch (error) {
-                  return { success: false, error: error.message }
+                  const payload = error?.payload
+                  const message = payload?.message || error.message || 'Registration failed'
+                  const fieldErrors = payload?.errors || {}
+                  const errors = Object.values(fieldErrors).flat()
+                  return { success: false, error: message, errors, fieldErrors }
             }
       }
 
-      const logout = () => {
+      const logout = async () => {
+            if (token) {
+                  try {
+                        await apiLogout(token)
+                  } catch (error) {
+                        // ignore backend logout errors and clear local state anyway
+                  }
+            }
             storeLogout()
+      }
+
+      const refreshUser = async () => {
+            if (!token) {
+                  return
+            }
+
+            try {
+                  const currentUser = await apiGetCurrentUser(token)
+                  setAuth(currentUser, token)
+            } catch (error) {
+                  storeLogout()
+            }
       }
 
       const isAuthenticated = !!user && !!token
@@ -37,6 +70,7 @@ export const useAuth = () => {
             login,
             register,
             logout,
+            refreshUser,
             enrollCourses,
             isAuthenticated,
             isAdmin

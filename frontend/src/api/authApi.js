@@ -17,3 +17,20 @@ export const register = async (firstName, lastName, email, password) => {
 
       return response
 }
+
+export const logout = async (token) => {
+      const response = await axiosClient('/auth/logout', {
+            method: 'POST',
+            token,
+      })
+
+      return response
+}
+
+export const me = async (token) => {
+      const response = await axiosClient('/auth/me', {
+            token,
+      })
+
+      return response
+}
