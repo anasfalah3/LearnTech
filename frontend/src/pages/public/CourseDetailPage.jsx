@@ -34,7 +34,7 @@ function CourseDetailPage() {
                   id: course.id,
                   slug: course.slug,
                   title: course.title,
-                  price: course.price,
+                  price: parseFloat(course.price) || 0,
                   priceLabel: course.priceLabel,
                   teacher: course.teacher,
                   image: course.image,
