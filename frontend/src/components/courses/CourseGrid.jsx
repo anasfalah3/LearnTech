@@ -1,7 +1,7 @@
 import React from 'react'
 import CourseCard from './CourseCard'
 
-function CourseGrid({ courses = [], title = 'Courses', subtitle = 'Popular Courses' }) {
+function CourseGrid({ courses = [], title = 'Courses', subtitle = 'Popular Courses', loading = false }) {
       return (
             <div className="container-xxl py-5">
                   <div className="container">
@@ -10,7 +10,16 @@ function CourseGrid({ courses = [], title = 'Courses', subtitle = 'Popular Cours
                               <h1 className="mb-5">{subtitle}</h1>
                         </div>
                         <div className="row g-4 justify-content-center">
-                              {courses.length > 0 ? (
+                              {loading ? (
+                                    <div className="col-12">
+                                          <div className="text-center">
+                                                <div className="spinner-border text-primary" role="status">
+                                                      <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                                <p className="text-muted mt-3">Loading courses...</p>
+                                          </div>
+                                    </div>
+                              ) : courses.length > 0 ? (
                                     courses.map((course) => <CourseCard key={course.id} course={course} />)
                               ) : (
                                     <div className="col-12">

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function CourseFilters({ search, category, onSearchChange, onCategoryChange, categories }) {
+export default function CourseFilters({ search, category, onSearchChange, onCategoryChange, categories, loading = false }) {
       return (
             <div className="row g-3 mb-5">
                   <div className="col-md-6">
@@ -12,6 +12,7 @@ export default function CourseFilters({ search, category, onSearchChange, onCate
                                     placeholder="Search courses"
                                     value={search}
                                     onChange={(e) => onSearchChange(e.target.value)}
+                                    disabled={loading}
                               />
                               <label htmlFor="search">Search courses</label>
                         </div>
@@ -23,6 +24,7 @@ export default function CourseFilters({ search, category, onSearchChange, onCate
                                     id="category"
                                     value={category}
                                     onChange={(e) => onCategoryChange(e.target.value)}
+                                    disabled={loading}
                               >
                                     <option value="all">All Categories</option>
                                     {categories.map((item) => (
@@ -42,6 +44,7 @@ export default function CourseFilters({ search, category, onSearchChange, onCate
                                     onSearchChange('')
                                     onCategoryChange('all')
                               }}
+                              disabled={loading}
                         >
                               Reset
                         </button>

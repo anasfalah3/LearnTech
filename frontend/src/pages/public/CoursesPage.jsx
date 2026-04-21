@@ -9,8 +9,8 @@ function CoursesPage() {
       const [searchParams] = useSearchParams()
       const [search, setSearch] = useState('')
       const [category, setCategory] = useState('all')
-      const { courses, loading: coursesLoading } = useCourses()
-      const { categories: apiCategories, loading: categoriesLoading } = useCategories()
+      const { courses, loading: coursesLoading, error: coursesError } = useCourses()
+      const { categories: apiCategories, loading: categoriesLoading, error: categoriesError } = useCategories()
 
       useEffect(() => {
             const categoryParam = searchParams.get('category')
@@ -65,12 +65,23 @@ function CoursesPage() {
                                     <h6 className="section-title bg-white text-center text-primary px-3">Shop</h6>
                                     <h1 className="mb-5">Browse Courses</h1>
                               </div>
+                              {categoriesError && (
+                                    <div className="alert alert-danger mb-4" role="alert">
+                                          Error loading categories: {categoriesError}
+                                    </div>
+                              )}
+                              {coursesError && (
+                                    <div className="alert alert-danger mb-4" role="alert">
+                                          Error loading courses: {coursesError}
+                                    </div>
+                              )}
                               <CourseFilters
                                     search={search}
                                     category={category}
                                     categories={categories}
                                     onSearchChange={setSearch}
                                     onCategoryChange={setCategory}
+                                    loading={categoriesLoading}
                               />
                               <div className="mb-4 text-end">
                                     {coursesLoading ? (
@@ -84,7 +95,7 @@ function CoursesPage() {
                   {/* Filters End */}
 
                   {/* Courses Start */}
-                  <CourseGrid courses={filteredCourses} />
+                  <CourseGrid courses={filteredCourses} loading={coursesLoading} />
                   {/* Courses End */}
 
                   {/* Testimonial Start */}

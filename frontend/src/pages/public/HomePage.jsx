@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
@@ -12,13 +11,8 @@ import CourseGrid from '../../components/courses/CourseGrid';
 import { useCourses, useCategories } from '../../hooks/useCourses'
 
 function HomePage() {
-    const { courses, loading } = useCourses()
-    const { categories } = useCategories()
-
-    useEffect(() => {
-        // Hooks will auto-fetch data on mount
-    }, [])
-
+    const { courses, loading: coursesLoading, error: coursesError } = useCourses()
+    const { categories, loading: categoriesLoading, error: categoriesError } = useCategories()
     const slides = [
         {
             img: "assets/img/carousel-1.jpg",

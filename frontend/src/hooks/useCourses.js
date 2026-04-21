@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getCourses, getCourseBySlug } from '../api/coursesApi'
-import axiosClient from '../api/axiosClient'
+import { getCategories } from '../api/categoriesApi'
 
 export const useCourses = () => {
       const [courses, setCourses] = useState([])
@@ -21,6 +21,10 @@ export const useCourses = () => {
             }
       }
 
+      useEffect(() => {
+            fetchCourses()
+      }, [])
+
       return { courses, loading, error, fetchCourses }
 }
 
@@ -33,8 +37,8 @@ export const useCategories = () => {
             setLoading(true)
             setError(null)
             try {
-                  const response = await axiosClient('/categories')
-                  setCategories(response.data || [])
+                  const data = await getCategories()
+                  setCategories(data || [])
             } catch (err) {
                   setError(err.message)
                   setCategories([])
@@ -42,6 +46,10 @@ export const useCategories = () => {
                   setLoading(false)
             }
       }
+
+      useEffect(() => {
+            fetchCategories()
+      }, [])
 
       return { categories, loading, error, fetchCategories }
 }

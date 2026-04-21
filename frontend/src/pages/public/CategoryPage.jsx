@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useCategories, useCourses } from '../../hooks/useCourses'
 
 function CategoryPage() {
-      const { categories, loading: categoriesLoading } = useCategories()
+      const { categories, loading: categoriesLoading, error: categoriesError } = useCategories()
       const { courses } = useCourses()
 
       // If no API categories, build from courses
@@ -61,6 +61,11 @@ function CategoryPage() {
                                     <h6 className="section-title bg-white text-center text-primary px-3">Categories</h6>
                                     <h1 className="mb-5">Browse by Category</h1>
                               </div>
+                              {categoriesError && (
+                                    <div className="alert alert-danger mb-4" role="alert">
+                                          Error loading categories: {categoriesError}
+                                    </div>
+                              )}
                               <div className="row g-4">
                                     {categoriesLoading ? (
                                           <div className="col-12">
