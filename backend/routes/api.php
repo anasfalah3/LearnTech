@@ -23,15 +23,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me',      [AuthController::class, 'me']);
+    Route::match(['put', 'patch'], '/auth/me', [AuthController::class, 'updateProfile']);
 
     Route::get('/cart',              [CartController::class, 'index']);
     Route::post('/cart/add',         [CartController::class, 'add']);
     Route::delete('/cart/remove/{id}', [CartController::class, 'remove']);
 
     Route::post('/orders',       [OrderController::class, 'store']);
+    Route::get('/orders',        [OrderController::class, 'index']);
     Route::get('/orders/{id}',   [OrderController::class, 'show']);
 
     Route::get('/enrollments',                          [EnrollmentController::class, 'index']);
+    Route::get('/enrollments/check/{course}',           [EnrollmentController::class, 'check']);
     Route::get('/enrollments/{course}/lessons',         [EnrollmentController::class, 'lessons']);
 });
 

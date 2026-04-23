@@ -25,6 +25,12 @@ class EnrollmentController extends Controller
         return response()->json(['data' => $courses]);
     }
 
+    public function check(Request $request, Course $course)
+    {
+        $isEnrolled = $request->user()->enrollments()->where('course_id', $course->id)->exists();
+        return response()->json(['isEnrolled' => $isEnrolled]);
+    }
+
     public function lessons(Request $request, Course $course)
     {
         $enrolled = $request->user()->enrollments()->where('course_id', $course->id)->exists();

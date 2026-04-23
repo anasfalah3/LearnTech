@@ -1,11 +1,14 @@
 import { Link, useParams } from 'react-router-dom'
 import { useCart } from '../../hooks/useCart'
 import { useCourseDetail } from '../../hooks/useCourses'
+import { useEnrollmentStatus } from '../../hooks/useEnrollmentStatus'
 
 function CourseDetailPage() {
       const { slug } = useParams()
       const { course, loading, error } = useCourseDetail(slug)
-      const { addToCart, cartItems, openSidebar } = useCart()
+      const { addToCart, cartItems, openSidebar, showToast } = useCart()
+      const { isEnrolled, loading: enrollmentLoading } = useEnrollmentStatus(course?.id)
+
       const inCart = cartItems.some((item) => item.id === course?.id)
 
       if (loading) {
@@ -30,6 +33,10 @@ function CourseDetailPage() {
       }
 
       const handleAddToCart = () => {
+            if (isEnrolled) {
+                  showToast('You are already enrolled in this course!')
+                  return
+            }
             addToCart({
                   id: course.id,
                   slug: course.slug,
@@ -56,6 +63,14 @@ function CourseDetailPage() {
                                     </div>
                                     <h6 className="section-title bg-white text-start text-primary pe-3">{course.category}</h6>
                                     <h1 className="mb-4">{course.title}</h1>
+
+                                    {/* Already Enrolled Badge */}
+                                    {isEnrolled && !enrollmentLoading && (
+                                          <div className="alert alert-success mb-3">
+                                                <i className="fa fa-check-circle me-2"></i>You are already enrolled in this course
+                                          </div>
+                                    )}
+
                                     <p className="mb-4">{course.description}</p>
                                     <div className="d-flex align-items-center mb-4">
                                           <span className="me-4 text-primary fs-4">{course.priceLabel}</span>
@@ -70,18 +85,20 @@ function CourseDetailPage() {
                                     <div className="d-flex gap-2">
                                           <button
                                                 onClick={handleAddToCart}
-                                                disabled={inCart}
-                                                className={`btn ${inCart ? 'btn-secondary' : 'btn-primary'} btn-lg`}
+                                                disabled={inCart || isEnrolled || enrollmentLoading}
+                                                className={`btn ${isEnrolled ? 'btn-success' : inCart ? 'btn-secondary' : 'btn-primary'} btn-lg`}
                                           >
-                                                {inCart ? 'In Cart' : 'Add to Cart'}
+                                                {isEnrolled ? 'Already Enrolled' : inCart ? 'In Cart' : 'Add to Cart'}
                                           </button>
-                                          <button
-                                                type="button"
-                                                className="btn btn-outline-primary btn-lg"
-                                                onClick={openSidebar}
-                                          >
-                                                View Cart
-                                          </button>
+                                          {!isEnrolled && (
+                                                <button
+                                                      type="button"
+                                                      className="btn btn-outline-primary btn-lg"
+                                                      onClick={openSidebar}
+                                                >
+                                                      View Cart
+                                                </button>
+                                          )}
                                     </div>
                               </div>
                         </div>

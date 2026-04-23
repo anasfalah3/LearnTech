@@ -39,8 +39,16 @@ class CartController extends Controller
             'course_id' => 'required|exists:courses,id',
         ]);
 
+        $user = $request->user();
         $course = Course::findOrFail($data['course_id']);
-        $cart = $request->user()->cart()->firstOrCreate([]);
+
+        // Check if user is already enrolled in this course
+        $isEnrolled = $user->enrollments()->where('course_id', $course->id)->exists();
+        if ($isEnrolled) {
+            return response()->json(['message' => 'You are already enrolled in this course'], 409);
+        }
+
+        $cart = $user->cart()->firstOrCreate([]);
 
         $exists = $cart->items()->where('course_id', $course->id)->exists();
         if ($exists) {

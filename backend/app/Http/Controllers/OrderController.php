@@ -10,6 +10,17 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
+    public function index(Request $request)
+    {
+        $user = $request->user();
+        $orders = $user->orders()
+            ->with('items.course')
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return response()->json(['data' => $orders]);
+    }
+
     public function store(Request $request)
     {
         $user = $request->user();
@@ -17,6 +28,23 @@ class OrderController extends Controller
 
         if (!$cart || $cart->items->isEmpty()) {
             return response()->json(['message' => 'Cart is empty'], 400);
+        }
+
+        // Validate that user is not already enrolled in any course in the cart
+        $enrolledCourseIds = $user->enrollments()->pluck('course_id')->toArray();
+        $cartCourseIds = $cart->items->pluck('course_id')->toArray();
+        $alreadyEnrolled = array_intersect($enrolledCourseIds, $cartCourseIds);
+
+        if (!empty($alreadyEnrolled)) {
+            $courseNames = $cart->items
+                ->whereIn('course_id', $alreadyEnrolled)
+                ->map(fn($item) => $item->course->title)
+                ->implode(', ');
+
+            return response()->json(
+                ['message' => "You are already enrolled in: {$courseNames}"],
+                422
+            );
         }
 
         $total = $cart->items->sum(function ($item) {

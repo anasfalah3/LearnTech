@@ -17,10 +17,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|in:user,admin',
+            'avatar' => 'nullable|string',
         ]);
 
         $data['password'] = Hash::make($data['password']);
@@ -37,10 +39,12 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
-            'name' => 'sometimes|string|max:255',
+            'first_name' => 'sometimes|string|max:255',
+            'last_name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:users,email,' . $user->id,
             'password' => 'sometimes|nullable|string|min:8',
             'role' => 'sometimes|in:user,admin',
+            'avatar' => 'nullable|string',
         ]);
 
         if (!empty($data['password'])) {
